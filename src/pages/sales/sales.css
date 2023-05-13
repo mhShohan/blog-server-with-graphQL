@@ -1,0 +1,23 @@
+.singleSale {
+    border: 1px solid gray;
+    padding: 1rem;
+    border-radius: 6px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .6rem;
+}
+
+.singleSale h1 {
+    font-size: 18px;
+}
+
+.singleSale h2 {
+    font-size: 16px;
+}
+
+.createSale {
+    width: 500px;
+}
