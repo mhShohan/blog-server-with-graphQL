@@ -1,5 +1,3 @@
-// async actions - api calling
-// api url - https://jsonplaceholder.typicode.com/todos
 import axios from "axios";
 
 // define constants
@@ -9,44 +7,32 @@ const FAILED = "FAILED";
 const URL = "https://jsonplaceholder.typicode.com/todos";
 
 // initial state
-const initialTodosState = {
-  todos: [],
+const initialState = {
+  state: [],
   isLoading: false,
   error: null,
 };
 
-const getTodosRequest = () => {
-  return {
-    type: REQUEST,
-  };
-};
+// action creator
+const request = () => ({ type: REQUEST });
+const success = (state) => ({ type: SUCCESS, payload: state });
+const failed = (error) => ({ type: FAILED, payload: error });
 
-const getTodosSuccess = (todos) => {
-  return {
-    type: SUCCESS,
-    payload: todos,
-  };
-};
-const getTodosFailed = (error) => {
-  return {
-    type: FAILED,
-    payload: error,
-  };
-};
-
-const reducer = (state = initialTodosState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case REQUEST:
       return {
         ...state,
         isLoading: true,
       };
+
     case SUCCESS:
       return {
         ...state,
-        todos: action.payload,
+        state: action.payload,
         isLoading: false,
       };
+
     case FAILED:
       return {
         ...state,
@@ -55,23 +41,23 @@ const reducer = (state = initialTodosState, action) => {
       };
 
     default:
-      state;
+      return state;
   }
 };
 
 const fetchData = () => {
   return (dispatch) => {
-    dispatch(getTodosRequest());
+    dispatch(request());
     axios
       .get(URL)
       .then((res) => {
-        const todos = res.data;
-        const titles = todos.map((todo) => todo.title);
-        dispatch(getTodosSuccess(titles));
+        const state = res.data;
+        const titles = state.map((todo) => todo.title);
+        dispatch(success(titles));
       })
       .catch((err) => {
         const error = err.message;
-        dispatch(getTodosFailed(error));
+        dispatch(failed(error));
       });
   };
 };
