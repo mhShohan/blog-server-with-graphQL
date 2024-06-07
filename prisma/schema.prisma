@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  username  String     @unique
+  email     String     @unique
+  password  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  role      UserRole   @default(USER)
+  status    UserStatus @default(ACTIVE)
+
+  // relations
+  profile   UserProfile?
+  blogs     Blog[]
+  comments  Comment[]
+  likedBlog BlogsLike[]
+
+  @@map("users")
+}
+
+model UserProfile {
+  id           String   @id @default(uuid())
+  firstName    String
+  lastName     String
+  title        String?
+  bio          String?
+  avatar       String?
+  githubLink   String?
+  twitterLink  String?
+  websiteLink  String?
+  linkedinLink String?
+  facebookLink String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // one-to-one relation with User
+  userId        String @unique
+  userProfileId User   @relation(fields: [userId], references: [id])
+
+  @@map("user_profiles")
+}
+
+model Blog {
+  id          String     @id @default(uuid())
+  title       String
+  content     String
+  images      String[]
+  status      BlogStatus
+  publishedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // one-to-many relation with User
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  comments  Comment[]
+  tags      BlogsTag[]
+  blogsLike BlogsLike[]
+
+  @@map("blogs")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // many-to-one relation with User
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  // many-to-one relation with Blog
+  blogId String
+  blog   Blog   @relation(fields: [blogId], references: [id])
+
+  @@map("comments")
+}
+
+model Tag {
+  id        String     @id @default(uuid())
+  name      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  blogs     BlogsTag[]
+
+  @@map("tags")
+}
+
+model BlogsTag {
+  blogId    String
+  blog      Blog     @relation(fields: [blogId], references: [id])
+  tagId     String
+  tag       Tag      @relation(fields: [tagId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([blogId, tagId])
+}
+
+model BlogsLike {
+  blogId    String
+  blog      Blog     @relation(fields: [blogId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([blogId, userId])
+}
+
+// to live the free postgre database (supabase) by cron job
+model LiveDB {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  @@map("live_db")
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+  BLOCKED
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  BLOCKED
+}
