@@ -46,8 +46,21 @@ const typeDefs = `#graphql
       username: String!
       email: String!
       password: String!
-    ): User
+      firstName: String!
+      lastName: String!
+    ): AuthResponse
 
+    login(
+      email: String!
+      password: String!
+    ): AuthResponse
+
+  }
+  
+  type AuthResponse {
+    success: Boolean!
+    message: String!
+    token: String
   }
 `;
 
