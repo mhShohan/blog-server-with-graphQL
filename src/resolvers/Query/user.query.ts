@@ -21,9 +21,23 @@ const user = async (_: any, args: { id: string }, { prisma }: IContext) => {
   })
 }
 
+const self = async (_: any, _args: any, { prisma, user }: IContext) => {
+  if (!user) return null
+
+  return await prisma.user.findUnique({
+    where: {
+      id: user.id
+    },
+    include: {
+      profile: true
+    }
+  })
+}
+
 const userQuery = {
   users,
-  user
+  user,
+  self
 }
 
 export default userQuery

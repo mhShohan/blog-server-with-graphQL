@@ -39,6 +39,7 @@ const typeDefs = `#graphql
   type Query {
     users: [User]
     user (id: ID!): User
+    self: User
     blogs: [Blog]
     blog (id: ID!): Blog
   }
@@ -60,7 +61,7 @@ const typeDefs = `#graphql
     createBlog(
       title: String!
       content: String!
-    ): Blog
+    ): CreateBlogResponse
 
   }
   
@@ -68,6 +69,12 @@ const typeDefs = `#graphql
     success: Boolean!
     message: String!
     token: String
+  }
+
+  type CreateBlogResponse {
+    success: Boolean!
+    message: String!
+    data: Blog
   }
 `;
 
