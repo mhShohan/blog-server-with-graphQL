@@ -1,12 +1,14 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
-import cron from 'node-cron';
+import { PrismaClient } from '@prisma/client';
 import typeDefs from './graphQL.schema';
+import { IContext } from './interface/common';
 import resolvers from './resolvers';
-import liveDB from './utils/liveDB';
 import config from './utils/config';
 
+const prisma = new PrismaClient();
 
+// main function
 const main = async () => {
 
   const server = new ApolloServer({
@@ -14,14 +16,13 @@ const main = async () => {
     resolvers,
   });
 
-  cron.schedule('0 * * * *', async () => {
-    const res = await liveDB()
-    console.log('CRON Job: ', res)
-  });
-
-
   const { url } = await startStandaloneServer(server, {
     listen: { port: config.port as number },
+    context: async (): Promise<IContext> => {
+      return {
+        prisma
+      }
+    }
   });
 
   console.log(`🚀  Server ready at: ${url}`);
