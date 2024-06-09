@@ -1,7 +1,6 @@
 const typeDefs = `#graphql
   type User {
     id          : ID!
-    name        : String!
     username    : String!
     email       : String!
     role        : String!
@@ -30,15 +29,18 @@ const typeDefs = `#graphql
     id          : ID!
     title       : String!
     content     : String!
-    images      : String!
-    status      : String!
-    publishedAt : String!
+    image       : String
+    status      : String
+    publishedAt : String
+    author      : User
   }
 
 
   type Query {
     users: [User]
+    user (id: ID!): User
     blogs: [Blog]
+    blog (id: ID!): Blog
   }
 
   type Mutation {
@@ -54,6 +56,11 @@ const typeDefs = `#graphql
       email: String!
       password: String!
     ): AuthResponse
+
+    createBlog(
+      title: String!
+      content: String!
+    ): Blog
 
   }
   

@@ -52,7 +52,7 @@ model Blog {
   id          String     @id @default(uuid())
   title       String
   content     String
-  images      String[]
+  image       String?
   status      BlogStatus
   publishedAt DateTime?
   createdAt   DateTime   @default(now())
