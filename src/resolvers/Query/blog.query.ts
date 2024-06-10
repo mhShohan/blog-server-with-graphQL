@@ -5,7 +5,11 @@ const blogs = async (_: any, args: any, { prisma }: IContext) => {
   return await prisma.blog.findMany({
     include: {
       author: true,
-      comments: true
+      comments: {
+        include: {
+          user: true
+        }
+      }
     }
   })
 }
@@ -17,7 +21,12 @@ const blog = async (_: any, args: { id: string }, { prisma }: IContext) => {
       id: args.id
     },
     include: {
-      author: true
+      author: true,
+      comments: {
+        include: {
+          user: true
+        }
+      }
     }
   })
 }

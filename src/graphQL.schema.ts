@@ -33,6 +33,16 @@ const typeDefs = `#graphql
     status      : String
     publishedAt : String
     author      : User
+    comments    : [Comment]
+  }
+
+  type Comment {
+    id        : ID!   
+    comment   : String
+    createdAt : String
+    updatedAt : String
+    blog      : Blog
+    user      : User
   }
 
 
@@ -63,6 +73,11 @@ const typeDefs = `#graphql
       content: String!
     ): CreateBlogResponse
 
+    createComment(
+      comment: String!
+      blogId: String!
+    ): CreateCommentResponse
+
   }
   
   type AuthResponse {
@@ -75,6 +90,12 @@ const typeDefs = `#graphql
     success: Boolean!
     message: String!
     data: Blog
+  }
+
+  type CreateCommentResponse {
+    success: Boolean!
+    message: String!
+    data: Comment
   }
 `;
 
