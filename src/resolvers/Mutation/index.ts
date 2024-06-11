@@ -8,6 +8,8 @@ const Mutation = {
   login: authMutation.login,
 
   createBlog: blogMutation.createBlog,
+  saveToDraft: blogMutation.createBlogAndSaveToDrafts,
+  publishBlog: blogMutation.publishDraftedBlog,
 
   createComment: commentMutation.createComment,
 }

@@ -73,6 +73,17 @@ const typeDefs = `#graphql
       content: String!
     ): CreateBlogResponse
 
+    saveToDraft(
+      title: String!
+      content: String!
+    ): CreateBlogResponse
+
+    publishBlog(
+      blogId: String!
+      title: String
+      content: String
+    ): CreateBlogResponse
+
     createComment(
       comment: String!
       blogId: String!

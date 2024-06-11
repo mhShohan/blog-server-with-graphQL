@@ -17,7 +17,7 @@ const createComment = async (_: any, args: { comment: string, blogId: string }, 
     return response
   }
 
-  const blog = await prisma.comment.create({
+  const comment = await prisma.comment.create({
     data: {
       comment: args.comment,
       blogId: args.blogId,
@@ -32,7 +32,7 @@ const createComment = async (_: any, args: { comment: string, blogId: string }, 
   return {
     success: true,
     message: 'Commented on Blog successfully',
-    data: blog
+    data: comment
   }
 }
 
