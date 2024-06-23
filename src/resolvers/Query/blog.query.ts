@@ -1,7 +1,7 @@
 import { IContext } from "../../interface/common"
 
 // Query to get all blogs
-const blogs = async (_: any, args: any, { prisma }: IContext) => {
+const blogs = async (_: any, _args: any, { prisma }: IContext) => {
   return await prisma.blog.findMany({
     include: {
       author: true,
